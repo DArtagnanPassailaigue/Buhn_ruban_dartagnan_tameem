@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class system {
 
@@ -7,7 +10,7 @@ public class system {
     }
 
     public static void enterCustomerInfo(){
-        // temporary copy of the code from python
+        // temporary code; try to split this into smaller functions
         Scanner input = new Scanner(System.in);
         System.out.println("Enter your first name: ");
         String firstname = input.next();
@@ -33,16 +36,22 @@ public class system {
             System.out.println("Invalid credit card number.");
             enterCustomerInfo();
         }
+        input.close();
         String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
-        folder = os.getcwd()
-        fileName = str(folder) + "\\temp.csv"
-        with open(fileName, "w") as currentEdit:
-            currentEdit.writelines(customerInfo)
+        try {
+            FileWriter myWriter = new FileWriter("temp.csv");
+            myWriter.write(customerInfo);
+            myWriter.close();
+            System.out.println("Customer data ready for geneartion.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public static void generateCustomerDataFile(){
         // temporary copy of the code from python
-        folderChoice = input("Enter the name of the folder you wish to save to: ")
+        System.out.println("Enter the name of the folder you wish to save to: ");
         folder = os.getcwd()
         fileName = str(folder) + "\\temp.csv"
         with open(fileName, "r") as currentEdit_r:
@@ -74,5 +83,6 @@ public class system {
             userInput = menuChoice.nextLine();
         } while(userInput != exitCondition);
         System.out.println("Program Terminated");
+        menuChoice.close();
     }
 }
