@@ -52,6 +52,7 @@ public class system {
     public static void generateCustomerDataFile(){
         // temporary copy of the code from python
         System.out.println("Enter the name of the folder you wish to save to: ");
+        /*
         folder = os.getcwd()
         fileName = str(folder) + "\\temp.csv"
         with open(fileName, "r") as currentEdit_r:
@@ -67,6 +68,7 @@ public class system {
         with open(fileName, "w") as currentEdit_w:
             userID += 1
             currentEdit_w.write(str(userID))
+        */
     }
 
     public static void main(String[] args){
