@@ -51,10 +51,8 @@ public class system {
 
     public static void generateCustomerDataFile(){
         // temporary copy of the code from python
-        System.out.println("Enter the name of the folder you wish to save to: ");
-        /*
-        folder = os.getcwd()
-        fileName = str(folder) + "\\temp.csv"
+        /*System.out.println("Enter the name of the folder you wish to save to: ");
+        File temp = new File("temp.csv");
         with open(fileName, "r") as currentEdit_r:
             tempContents = currentEdit_r.read()
         fileName = str(folder) + "\\userID.txt"
