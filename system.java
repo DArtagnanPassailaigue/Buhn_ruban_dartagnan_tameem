@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class system {
 
@@ -52,26 +53,26 @@ public class system {
 
     public static void generateCustomerDataFile(){
         // temporary copy of the code from python
-        ArrayList String tempData;
+        ArrayList<String> tempData = new ArrayList<String>();
         Scanner input = new Scanner(System.in);
         System.out.println("Enter the name of the folder you wish to save to: ");
         String fileChoice = input.next();
         File temp = new File("temp.csv");
         Scanner tempReader = new Scanner(temp);
         while (tempReader.hasNextLine()) {
-            tempData = tempReader.nextLine();
+            tempData.add(tempReader.nextLine());
         }
         File userIDFile = new File("userID.txt");
         Scanner userIDReader = new Scanner(userIDFile);
         String userID = userIDReader.nextLine();
         String userFileContents = userID + tempData;
         Integer.parseInt(userID);
-        
+        /*
         fileName = str(folder) + "\\userID.txt"
         with open(fileName, "w") as currentEdit_w:
             userID += 1
             currentEdit_w.write(str(userID))
-        
+        */
     }
 
     public static void main(String[] args){
