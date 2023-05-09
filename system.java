@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class system {
 
@@ -51,22 +52,26 @@ public class system {
 
     public static void generateCustomerDataFile(){
         // temporary copy of the code from python
-        /*System.out.println("Enter the name of the folder you wish to save to: ");
+        ArrayList String tempData;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the name of the folder you wish to save to: ");
+        String fileChoice = input.next();
         File temp = new File("temp.csv");
-        with open(fileName, "r") as currentEdit_r:
-            tempContents = currentEdit_r.read()
-        fileName = str(folder) + "\\userID.txt"
-        with open(fileName, "r") as currentEdit_r:
-            userID = currentEdit_r.read()
-        userID = int(userID)
-        fileName = str(folder) + "\\" + folderChoice
-        with open(fileName, "a") as currentEdit_a:
-            currentEdit_a.write(str(userID) + "," + tempContents + "\n")
+        Scanner tempReader = new Scanner(temp);
+        while (tempReader.hasNextLine()) {
+            tempData = tempReader.nextLine();
+        }
+        File userIDFile = new File("userID.txt");
+        Scanner userIDReader = new Scanner(userIDFile);
+        String userID = userIDReader.nextLine();
+        String userFileContents = userID + tempData;
+        Integer.parseInt(userID);
+        
         fileName = str(folder) + "\\userID.txt"
         with open(fileName, "w") as currentEdit_w:
             userID += 1
             currentEdit_w.write(str(userID))
-        */
+        
     }
 
     public static void main(String[] args){
