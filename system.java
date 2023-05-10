@@ -52,27 +52,50 @@ public class system {
     }
 
     public static void generateCustomerDataFile(){
-        // temporary copy of the code from python
-        ArrayList<String> tempData = new ArrayList<String>();
         Scanner input = new Scanner(System.in);
         System.out.println("Enter the name of the folder you wish to save to: ");
-        String fileChoice = input.next();
-        File temp = new File("temp.csv");
-        Scanner tempReader = new Scanner(temp);
-        while (tempReader.hasNextLine()) {
-            tempData.add(tempReader.nextLine());
-        }
-        File userIDFile = new File("userID.txt");
-        Scanner userIDReader = new Scanner(userIDFile);
-        String userID = userIDReader.nextLine();
-        String userFileContents = userID + tempData;
+        append(input.next());
         Integer.parseInt(userID);
-        /*
-        fileName = str(folder) + "\\userID.txt"
-        with open(fileName, "w") as currentEdit_w:
-            userID += 1
-            currentEdit_w.write(str(userID))
-        */
+        userID += 1;
+    }
+
+    public static String readUserID(){
+        try{
+            File userIDFile = new File("userID.txt");
+            Scanner userIDReader = new Scanner(userIDFile);
+            String userID = userIDReader.next();
+            userIDReader.close();
+            return userID;
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String combine(String combinedOutput){
+        ;
+    }
+
+    public static String readTemp(int i){
+        try{
+            File temp = new File("temp.csv");
+            Scanner tempReader = new Scanner(temp);
+            tempReader.useDelimiter(",");
+            return(tempReader.next(i));
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static void append(String chosenFile){
+        ;
+    }
+
+    public static int updateUserID(int userID){
+        return(0); //placeholder
     }
 
     public static void main(String[] args){
