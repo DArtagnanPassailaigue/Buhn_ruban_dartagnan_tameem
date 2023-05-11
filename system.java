@@ -1,9 +1,9 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class system {
 
@@ -51,12 +51,23 @@ public class system {
         }
     }
 
-    public static void generateCustomerDataFile(){
+    public static void generateCustomerInfo(){
         Scanner input = new Scanner(System.in);
         System.out.println("Enter the name of the folder you wish to save to: ");
-        append(input.next());
-        Integer.parseInt(userID);
-        userID += 1;
+        String fileName = input.next();
+        input.close();
+        try {
+            FileWriter write = new FileWriter(fileName, true);
+            BufferedWriter append = new BufferedWriter(write);
+            String userInfo = readUserID() + readTemp();
+            append.write(userInfo);
+            append.newLine();
+            append.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        updateUserID();
     }
 
     public static String readUserID(){
@@ -73,16 +84,13 @@ public class system {
         }
     }
 
-    public static String combine(String combinedOutput){
-        ;
-    }
-
-    public static String readTemp(int i){
-        try{
+    public static String readTemp(){
+        try {
             File temp = new File("temp.csv");
             Scanner tempReader = new Scanner(temp);
-            tempReader.useDelimiter(",");
-            return(tempReader.next(i));
+            String tempData = tempReader.next();
+            tempReader.close();
+            return tempData;
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -90,18 +98,23 @@ public class system {
         }
     }
 
-    public static void append(String chosenFile){
-        ;
-    }
-
-    public static int updateUserID(int userID){
-        return(0); //placeholder
+    public static void updateUserID(){
+        String userID = readUserID();
+        Integer.parseInt(userID);
+        userID += 1;
+        try{
+            FileWriter userIDUpdateWriter = new FileWriter("userID.txt");
+            userIDUpdateWriter.write(userID);
+            userIDUpdateWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args){
-        selection();
         Scanner menuChoice = new Scanner(System.in);
-        String userInput;
+        String userInput = "";
         String enterCustomer = "1";
         String generateCustomer = "2";
         String reportSales = "3";
@@ -109,7 +122,14 @@ public class system {
         String exitCondition = "9";
         do {
             selection();
-            userInput = menuChoice.nextLine();
+            userInput = menuChoice.next();
+            if(userInput == enterCustomer){
+                enterCustomerInfo();
+            } else if(userInput == generateCustomer){
+                generateCustomerInfo();
+            } else{
+                System.out.println("Invalid input");
+            }
         } while(userInput != exitCondition);
         System.out.println("Program Terminated");
         menuChoice.close();
