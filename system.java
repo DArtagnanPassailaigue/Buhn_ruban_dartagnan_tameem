@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-
 public class system {
 
     public static void selection(){
@@ -41,7 +39,9 @@ public class system {
         input.close();
         String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
         try {
-            FileWriter myWriter = new FileWriter("temp.csv");
+            File file = new File("temp.csv");
+            String path = file.getAbsolutePath();
+            FileWriter myWriter = new FileWriter(path);
             myWriter.write(customerInfo);
             myWriter.close();
             System.out.println("Customer data ready for geneartion.");
@@ -113,8 +113,8 @@ public class system {
     }
 
     public static void main(String[] args){
-        Scanner menuChoice = new Scanner(System.in);
-        String userInput = "";
+        Scanner menuChoice = new Scanner(System.in).useDelimiter("\n");
+        String userInput = null;
         String enterCustomer = "1";
         String generateCustomer = "2";
         String reportSales = "3";
@@ -123,14 +123,14 @@ public class system {
         do {
             selection();
             userInput = menuChoice.next();
-            if(userInput == enterCustomer){
+            if(userInput.equals(enterCustomer)){
                 enterCustomerInfo();
-            } else if(userInput == generateCustomer){
+            } else if(userInput.equals(generateCustomer)){
                 generateCustomerInfo();
             } else{
                 System.out.println("Invalid input");
             }
-        } while(userInput != exitCondition);
+        } while(!userInput.equals(exitCondition));
         System.out.println("Program Terminated");
         menuChoice.close();
     }
