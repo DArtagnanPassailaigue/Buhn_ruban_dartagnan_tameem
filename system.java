@@ -5,57 +5,59 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 public class system {
 
+    private static Scanner input;
+    
     public static void selection(){
         System.out.println("Customer and Sales System\n 1. Enter Customer Information\n 2. Generate Customer data file\n 3. Report on total Sales \n 4. Check for fraud in sales data \n 9. Quit\n Enter menu option (1-9): ");
     }
 
-    public static void enterCustomerInfo(){
-        // temporary code; try to split this into smaller functions
-        Scanner input = new Scanner(System.in);
+    public static void enterCustomerInfo(Scanner input){
+        String firstname, lastname, city, postalcode, creditcard;
+
+    do {
         System.out.println("Enter your first name: ");
-        String firstname = input.next();
+        firstname = input.next();
         System.out.println("Enter your surname: ");
-        String lastname = input.next();
+        lastname = input.next();
         System.out.println("Enter the name of your city: ");
-        String city = input.next();
+        city = input.next();
         System.out.println("Enter your postal code: ");
-        String postalcode = input.next();
-        if(postalcode.length() >= 3){
-            ;
-        }
-        else {
+        postalcode = input.next();
+
+        if (postalcode.length() < 3) {
             System.out.println("Invalid postal code");
-            enterCustomerInfo();
         }
-        System.out.println("Enter your credit card number: ");
-        String creditcard = input.next();
-        if(creditcard.length() >= 9){
-            ;
-        }
-        else {
-            System.out.println("Invalid credit card number.");
-            enterCustomerInfo();
-        }
-        input.close();
-        String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
-        try {
-            File file = new File("temp.csv");
-            String path = file.getAbsolutePath();
-            FileWriter myWriter = new FileWriter(path);
-            myWriter.write(customerInfo);
-            myWriter.close();
-            System.out.println("Customer data ready for geneartion.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        } while (postalcode.length() < 3);
+
+        do {
+            System.out.println("Enter your credit card number: ");
+            creditcard = input.next();
+
+            if (creditcard.length() < 9) {
+                System.out.println("Invalid credit card number.");
+            }
+        } while (creditcard.length() < 9);
+            String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
+            try {
+                File file = new File("temp.csv");
+                String path = file.getAbsolutePath();
+                FileWriter myWriter = new FileWriter(path);
+                myWriter.write(customerInfo);
+                myWriter.close();
+                System.out.println("Customer data ready for geneartion.");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
     }
 
-    public static void generateCustomerInfo(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter the name of the folder you wish to save to: ");
-        String fileName = input.next();
-        input.close();
+    public static void generateCustomerInfo(Scanner scanner){
+        String fileName;
+        do {
+            System.out.println("Enter the name of the folder you wish to save to: ");
+            fileName = scanner.next();
+        } while (fileName == null || fileName.trim().isEmpty());
+
         try {
             FileWriter write = new FileWriter(fileName, true);
             BufferedWriter append = new BufferedWriter(write);
@@ -100,9 +102,11 @@ public class system {
 
     public static void updateUserID(){
         String userID = readUserID();
-        Integer.parseInt(userID);
-        userID += 1;
-        try{
+        int userIDValue = Integer.parseInt(userID); // Convert to integer
+        userIDValue++; // Increment the value
+        userID = Integer.toString(userIDValue); // Convert back to string
+    
+        try {
             FileWriter userIDUpdateWriter = new FileWriter("userID.txt");
             userIDUpdateWriter.write(userID);
             userIDUpdateWriter.close();
@@ -112,26 +116,45 @@ public class system {
         }
     }
 
-    public static void main(String[] args){
-        Scanner menuChoice = new Scanner(System.in).useDelimiter("\n");
+    public static boolean luhnAlgo(String cardNo) {
+        int nDigits = cardNo.length();
+
+        int nSum = 0;
+        boolean isSecond = false;
+        for (int i = nDigits - 1; i >= 0; i--) {
+            int d = cardNo.charAt(i) - '0';
+
+            if (isSecond == true)
+                d = d * 2;
+
+            nSum += d / 10;
+            nSum += d % 10;
+
+            isSecond = !isSecond;
+        }
+        return (nSum % 10 == 0);
+    }
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
         String enterCustomer = "1";
         String generateCustomer = "2";
         String reportSales = "3";
         String checkFraud = "4";
         String exitCondition = "9";
+        
         do {
             selection();
-            userInput = menuChoice.next();
-            if(userInput.equals(enterCustomer)){
-                enterCustomerInfo();
-            } else if(userInput.equals(generateCustomer)){
-                generateCustomerInfo();
-            } else{
+            userInput = input.next();
+            if (userInput.equals(enterCustomer)) {
+                enterCustomerInfo(input); // Pass the Scanner instance as a parameter
+            } else if (userInput.equals(generateCustomer)) {
+                generateCustomerInfo(input); // Pass the Scanner instance as a parameter
+            } else {
                 System.out.println("Invalid input");
             }
-        } while(!userInput.equals(exitCondition));
+        } while (!userInput.equals(exitCondition));
         System.out.println("Program Terminated");
-        menuChoice.close();
     }
 }
