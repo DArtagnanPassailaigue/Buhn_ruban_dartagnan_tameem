@@ -1,8 +1,8 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
-
 public class system {
 
     public static void selection(){
@@ -39,7 +39,9 @@ public class system {
         input.close();
         String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
         try {
-            FileWriter myWriter = new FileWriter("temp.csv");
+            File file = new File("temp.csv");
+            String path = file.getAbsolutePath();
+            FileWriter myWriter = new FileWriter(path);
             myWriter.write(customerInfo);
             myWriter.close();
             System.out.println("Customer data ready for geneartion.");
@@ -49,30 +51,70 @@ public class system {
         }
     }
 
-    public static void generateCustomerDataFile(){
-        // temporary copy of the code from python
-        /*System.out.println("Enter the name of the folder you wish to save to: ");
-        File temp = new File("temp.csv");
-        with open(fileName, "r") as currentEdit_r:
-            tempContents = currentEdit_r.read()
-        fileName = str(folder) + "\\userID.txt"
-        with open(fileName, "r") as currentEdit_r:
-            userID = currentEdit_r.read()
-        userID = int(userID)
-        fileName = str(folder) + "\\" + folderChoice
-        with open(fileName, "a") as currentEdit_a:
-            currentEdit_a.write(str(userID) + "," + tempContents + "\n")
-        fileName = str(folder) + "\\userID.txt"
-        with open(fileName, "w") as currentEdit_w:
-            userID += 1
-            currentEdit_w.write(str(userID))
-        */
+    public static void generateCustomerInfo(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the name of the folder you wish to save to: ");
+        String fileName = input.next();
+        input.close();
+        try {
+            FileWriter write = new FileWriter(fileName, true);
+            BufferedWriter append = new BufferedWriter(write);
+            String userInfo = readUserID() + readTemp();
+            append.write(userInfo);
+            append.newLine();
+            append.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        updateUserID();
+    }
+
+    public static String readUserID(){
+        try{
+            File userIDFile = new File("userID.txt");
+            Scanner userIDReader = new Scanner(userIDFile);
+            String userID = userIDReader.next();
+            userIDReader.close();
+            return userID;
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String readTemp(){
+        try {
+            File temp = new File("temp.csv");
+            Scanner tempReader = new Scanner(temp);
+            String tempData = tempReader.next();
+            tempReader.close();
+            return tempData;
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static void updateUserID(){
+        String userID = readUserID();
+        Integer.parseInt(userID);
+        userID += 1;
+        try{
+            FileWriter userIDUpdateWriter = new FileWriter("userID.txt");
+            userIDUpdateWriter.write(userID);
+            userIDUpdateWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args){
-        selection();
-        Scanner menuChoice = new Scanner(System.in);
-        String userInput;
+        Scanner menuChoice = new Scanner(System.in).useDelimiter("\n");
+        String userInput = null;
         String enterCustomer = "1";
         String generateCustomer = "2";
         String reportSales = "3";
@@ -80,8 +122,15 @@ public class system {
         String exitCondition = "9";
         do {
             selection();
-            userInput = menuChoice.nextLine();
-        } while(userInput != exitCondition);
+            userInput = menuChoice.next();
+            if(userInput.equals(enterCustomer)){
+                enterCustomerInfo();
+            } else if(userInput.equals(generateCustomer)){
+                generateCustomerInfo();
+            } else{
+                System.out.println("Invalid input");
+            }
+        } while(!userInput.equals(exitCondition));
         System.out.println("Program Terminated");
         menuChoice.close();
     }
