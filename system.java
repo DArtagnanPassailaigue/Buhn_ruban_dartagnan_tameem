@@ -6,6 +6,7 @@ import java.io.IOException;
 public class system {
 
     private static Scanner input;
+    // global scanner used for multiple runs of the program
     
     public static void selection(){
         /**
@@ -24,13 +25,16 @@ public class system {
             try {
                 File file = new File("temp.csv");
                 String path = file.getAbsolutePath();
+                // gets the file path to temp.csv on any device
                 FileWriter myWriter = new FileWriter(path);
                 myWriter.write(customerInfo);
+                // writes the temporary data to the temp file
                 myWriter.close();
                 System.out.println("Customer data ready for geneartion.");
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
+                // catches in case of an IOException error
             }
     }
     
@@ -92,57 +96,47 @@ public class system {
         do {
             System.out.println("Enter the name of the folder you wish to save to: ");
             fileName = scanner.next();
+            // asks the user for a filename input and loops if nothing is input
         } while (fileName == null || fileName.trim().isEmpty());
 
         try {
             FileWriter write = new FileWriter(fileName, true);
             BufferedWriter append = new BufferedWriter(write);
-            String userInfo = readUserID() + "," + readTemp();
+            // uses a combination of filewriter and buffered writer to append
+            String userInfo = readFile("userID.txt") + "," + readFile("temp.csv");
+            // combines the results of readUserId() and readTemp() 
             append.write(userInfo);
+            // appends the result to the desired file
             append.newLine();
             append.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+            // catches in case of an IOException error
         }
         updateUserID();
+        // runs updateUserId() at the end
     }
 
-    public static String readUserID(){
+    public static String readFile(String filename){
         /**
          * @author D'Artagnan
          * @return the value of userID from the file as a string
          * reads from the userID file and returns it as a string
          */
         try{
-            File userIDFile = new File("userID.txt");
-            Scanner userIDReader = new Scanner(userIDFile);
-            String userID = userIDReader.next();
-            userIDReader.close();
-            return userID;
+            File file = new File(filename);
+            Scanner fileReader = new Scanner(file);
+            // reads the userID
+            String fileInfo = fileReader.next();
+            fileReader.close();
+            return fileInfo;
+            // returns it as a string
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
             return "";
-        }
-    }
-
-    public static String readTemp(){
-        /**
-         * @author D'Artagnan
-         * @return the contents of the temp file
-         * reads the temp file and returns the contents as a string
-         */
-        try {
-            File temp = new File("temp.csv");
-            Scanner tempReader = new Scanner(temp);
-            String tempData = tempReader.next();
-            tempReader.close();
-            return tempData;
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-            return "";
+            // catches in case of an IOException error
         }
     }
 
@@ -151,7 +145,7 @@ public class system {
          * @author D'Artagnan
          * adds 1 to the userID value and writes it to userID.txt
          */
-        String userID = readUserID();
+        String userID = readFile("userID.txt");
         int userIDValue = Integer.parseInt(userID); // Convert to integer
         userIDValue++; // Increment the value
         userID = Integer.toString(userIDValue); // Convert back to string
@@ -160,9 +154,11 @@ public class system {
             FileWriter userIDUpdateWriter = new FileWriter("userID.txt");
             userIDUpdateWriter.write(userID);
             userIDUpdateWriter.close();
+            // writes the updated userID to the userID file
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+            // catches in case of an IOException error
         }
     }
 
@@ -196,9 +192,10 @@ public class system {
         String reportSales = "3";
         String checkFraud = "4";
         String exitCondition = "9";
-        
+        // calls all of the values of the menu option inputs
         do {
             selection();
+            // prints the main menu
             userInput = input.next();
             if (userInput.equals(enterCustomer)) {
                 writeToTempFile(enterCustomerInfo(),input); // Pass the Scanner instance as a parameter
@@ -206,10 +203,12 @@ public class system {
                 generateCustomerInfo(input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(exitCondition)) {
                 ;
+                // does nothing so that an exit condition being met will not print "invalid input"
             } else {
                 System.out.println("Invalid input");
             }
         } while (!userInput.equals(exitCondition));
+        // do-while loop for multiple runs of the program
         System.out.println("Program Terminated");
     }
 }
