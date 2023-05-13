@@ -8,35 +8,42 @@ public class system {
     private static Scanner input;
     
     public static void selection(){
+        /**
+         * @author D'Artagnan
+         * prints the system's main menu
+         */
         System.out.println("Customer and Sales System\n 1. Enter Customer Information\n 2. Generate Customer data file\n 3. Report on total Sales \n 4. Check for fraud in sales data \n 9. Quit\n Enter menu option (1-9): ");
     }
 
     public static void enterCustomerInfo(Scanner input){
+        /**
+         * @author D'Artagnan
+         * @param takes the scanner input when the function is accessed from the menu
+         * takes the user's information and stores them in a temp file
+         */
         String firstname, lastname, city, postalcode, creditcard;
-
-    do {
-        System.out.println("Enter your first name: ");
-        firstname = input.next();
-        System.out.println("Enter your surname: ");
-        lastname = input.next();
-        System.out.println("Enter the name of your city: ");
-        city = input.next();
-        System.out.println("Enter your postal code: ");
-        postalcode = input.next();
-
-        if (postalcode.length() < 3) {
-            System.out.println("Invalid postal code");
-        }
-        } while (postalcode.length() < 3);
-
+        // calls the variables for the various pieces of customer data
         do {
+            System.out.println("Enter your first name: ");
+            firstname = input.next();
+            System.out.println("Enter your surname: ");
+            lastname = input.next();
+            System.out.println("Enter the name of your city: ");
+            city = input.next();
+            System.out.println("Enter your postal code: ");
+            postalcode = input.next();
+            if (postalcode.length() < 3) {
+                System.out.println("Invalid postal code");
+            }
+            // postal code function call will go here
             System.out.println("Enter your credit card number: ");
             creditcard = input.next();
-
             if (creditcard.length() < 9) {
                 System.out.println("Invalid credit card number.");
+            } else if(luhnAlgo(creditcard) = false){
+
             }
-        } while (creditcard.length() < 9);
+        } while (creditcard.length() < 9 && postalcode.length() < 3);
             String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
             try {
                 File file = new File("temp.csv");
@@ -52,6 +59,11 @@ public class system {
     }
 
     public static void generateCustomerInfo(Scanner scanner){
+        /**
+         * @author D'Artagnan
+         * @param takes the scanner input when the function is accessed from the menu
+         * asks for a file name to save the user's data to and pulls it from the temp file to save it to the specified file
+         */
         String fileName;
         do {
             System.out.println("Enter the name of the folder you wish to save to: ");
@@ -73,6 +85,11 @@ public class system {
     }
 
     public static String readUserID(){
+        /**
+         * @author D'Artagnan
+         * @return the value of userID from the file as a string
+         * reads from the userID file and returns it as a string
+         */
         try{
             File userIDFile = new File("userID.txt");
             Scanner userIDReader = new Scanner(userIDFile);
@@ -87,6 +104,11 @@ public class system {
     }
 
     public static String readTemp(){
+        /**
+         * @author D'Artagnan
+         * @return the contents of the temp file
+         * reads the temp file and returns the contents as a string
+         */
         try {
             File temp = new File("temp.csv");
             Scanner tempReader = new Scanner(temp);
@@ -101,6 +123,10 @@ public class system {
     }
 
     public static void updateUserID(){
+        /**
+         * @author D'Artagnan
+         * adds 1 to the userID value and writes it to userID.txt
+         */
         String userID = readUserID();
         int userIDValue = Integer.parseInt(userID); // Convert to integer
         userIDValue++; // Increment the value
@@ -136,6 +162,9 @@ public class system {
     }
 
     public static void main(String[] args) {
+        /**
+         * Prints the menu and takes the user's inputs to run the various commands of the program
+         */
         Scanner input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
         String enterCustomer = "1";
