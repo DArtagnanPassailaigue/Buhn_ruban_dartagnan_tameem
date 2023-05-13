@@ -15,36 +15,12 @@ public class system {
         System.out.println("Customer and Sales System\n 1. Enter Customer Information\n 2. Generate Customer data file\n 3. Report on total Sales \n 4. Check for fraud in sales data \n 9. Quit\n Enter menu option (1-9): ");
     }
 
-    public static void enterCustomerInfo(Scanner input){
+    public static void writeToTempFile(String customerInfo, Scanner input){
         /**
          * @author D'Artagnan
          * @param takes the scanner input when the function is accessed from the menu
          * takes the user's information and stores them in a temp file
          */
-        String firstname, lastname, city, postalcode, creditcard;
-        // calls the variables for the various pieces of customer data
-        do {
-            System.out.println("Enter your first name: ");
-            firstname = input.next();
-            System.out.println("Enter your surname: ");
-            lastname = input.next();
-            System.out.println("Enter the name of your city: ");
-            city = input.next();
-            System.out.println("Enter your postal code: ");
-            postalcode = input.next();
-            if (postalcode.length() < 3) {
-                System.out.println("Invalid postal code");
-            }
-            // postal code function call will go here
-            System.out.println("Enter your credit card number: ");
-            creditcard = input.next();
-            if (creditcard.length() < 9) {
-                System.out.println("Invalid credit card number.");
-            } else if(luhnAlgo(creditcard) = false){
-
-            }
-        } while (creditcard.length() < 9 && postalcode.length() < 3);
-            String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
             try {
                 File file = new File("temp.csv");
                 String path = file.getAbsolutePath();
@@ -56,6 +32,54 @@ public class system {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
+    }
+    
+    public static String enterFirstName(Scanner input) {
+        System.out.println("Enter your first name: ");
+        return input.next();
+    }
+    
+    public static String enterLastName(Scanner input) {
+        System.out.println("Enter your surname: ");
+        return input.next();
+    }
+    
+    public static String enterCity(Scanner input) {
+        System.out.println("Enter the name of your city: ");
+        return input.next();
+    }
+    
+    public static String enterPostalCode(Scanner input) {
+        String postalcode;
+        do {
+            System.out.println("Enter your postal code: ");
+            postalcode = input.next();
+            if (postalcode.length() < 3) {
+                System.out.println("Invalid postal code");
+            }
+        } while (postalcode.length() < 3);
+        return postalcode;
+    }
+    
+    public static String enterCreditCard(Scanner input) {
+        String creditcard;
+        do {
+            System.out.println("Enter your credit card number: ");
+            creditcard = input.next();
+            if (creditcard.length() < 9 || !luhnAlgo(creditcard)) {
+                System.out.println("Invalid credit card number.");
+            }
+        } while (creditcard.length() < 9 || !luhnAlgo(creditcard));
+        return creditcard;
+    }
+
+    public static String enterCustomerInfo() {
+        String firstname = enterFirstName(input);
+        String lastname = enterLastName(input);
+        String city = enterCity(input);
+        String postalcode = enterPostalCode(input);
+        String creditcard = enterCreditCard(input);
+        return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
     }
 
     public static void generateCustomerInfo(Scanner scanner){
@@ -73,7 +97,7 @@ public class system {
         try {
             FileWriter write = new FileWriter(fileName, true);
             BufferedWriter append = new BufferedWriter(write);
-            String userInfo = readUserID() + readTemp();
+            String userInfo = readUserID() + "," + readTemp();
             append.write(userInfo);
             append.newLine();
             append.close();
@@ -165,7 +189,7 @@ public class system {
         /**
          * Prints the menu and takes the user's inputs to run the various commands of the program
          */
-        Scanner input = new Scanner(System.in); // Create a single instance of Scanner
+        input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
         String enterCustomer = "1";
         String generateCustomer = "2";
@@ -177,9 +201,11 @@ public class system {
             selection();
             userInput = input.next();
             if (userInput.equals(enterCustomer)) {
-                enterCustomerInfo(input); // Pass the Scanner instance as a parameter
+                writeToTempFile(enterCustomerInfo(),input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(generateCustomer)) {
                 generateCustomerInfo(input); // Pass the Scanner instance as a parameter
+            } else if (userInput.equals(exitCondition)) {
+                ;
             } else {
                 System.out.println("Invalid input");
             }
