@@ -58,8 +58,9 @@ public class system {
     }
 
     public static String postalcodeCheck(String postalcode, String postalFile){
+
         System.out.println("");
-        String test = null;
+        String validation = null;
         // ArrayList<String> lines = new ArrayList<String>();
         
         if(postalcode.length() >= 3){
@@ -71,7 +72,7 @@ public class system {
             while(true) {
                 line = reader.readLine();
                 if (line.contains(postalcode)) {
-                    test = "Valid Postal code";
+                    validation = "Valid Postal code";
                     break;
                 }
                 // lines.add(line);
@@ -85,7 +86,7 @@ public class system {
 			    System.out.println(f.getMessage());
             }
         }
-            return test;
+            return validation;
             
     }
             
