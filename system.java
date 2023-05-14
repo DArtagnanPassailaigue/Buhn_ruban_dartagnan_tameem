@@ -1,6 +1,10 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 public class system {
@@ -22,13 +26,15 @@ public class system {
         System.out.println("Enter the name of your city: ");
         city = input.next();
         System.out.println("Enter your postal code: ");
-        postalcode = input.next();
+        postalcode = input.next().toUpperCase();
 
         if (postalcode.length() < 3) {
             System.out.println("Invalid postal code");
         }
         } while (postalcode.length() < 3);
-
+        
+      	System.out.println(postalcodeCheck(postalcode, "postal_codes.csv"));
+        // System.out.println(code);
         do {
             System.out.println("Enter your credit card number: ");
             creditcard = input.next();
@@ -51,6 +57,38 @@ public class system {
             }
     }
 
+    public static String postalcodeCheck(String postalcode, String postalFile){
+        System.out.println("");
+        String test = null;
+        // ArrayList<String> lines = new ArrayList<String>();
+        
+        if(postalcode.length() >= 3){
+            postalcode = postalcode.substring(0, 3);
+	        try {		
+		    FileReader fileRead = new FileReader(postalFile);
+		    BufferedReader reader = new BufferedReader(fileRead);
+            String line;
+            while(true) {
+                line = reader.readLine();
+                if (line.contains(postalcode)) {
+                    test = "Valid Postal code";
+                    break;
+                }
+                // lines.add(line);
+                // System.out.println(lines);
+                // test = "works";
+                // System.out.println(test);
+		    }
+            reader.close();
+
+        }   catch (Exception f) {
+			    System.out.println(f.getMessage());
+            }
+        }
+            return test;
+            
+    }
+            
     public static void generateCustomerInfo(Scanner scanner){
         String fileName;
         do {
@@ -135,6 +173,29 @@ public class system {
         return (nSum % 10 == 0);
     }
 
+    public static ArrayList<String> reportSales(String salesFile){
+        ArrayList<String> salesList= new ArrayList<String>();
+        try {		
+		    FileReader fileRead = new FileReader(salesFile);
+		    BufferedReader reader = new BufferedReader(fileRead);
+            String line;
+            String numberRegex = "\\d+";
+            while((line = reader.readLine()) != null) {
+                String salesAmountStr = line.split(",")[1];
+                if (salesAmountStr.matches(numberRegex)) {
+                    salesList.add(line.split(",")[1]);
+                }
+		    }
+            reader.close();
+            System.out.println("Sales: "+ salesList);
+            
+        }   catch (FileNotFoundException g) {
+                System.out.println(g.getMessage());
+        }   catch (Exception h) {
+			    System.out.println(h.getMessage());
+            }
+        return salesList;
+    }
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
@@ -151,6 +212,9 @@ public class system {
                 enterCustomerInfo(input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(generateCustomer)) {
                 generateCustomerInfo(input); // Pass the Scanner instance as a parameter
+            } else if (userInput.equals(reportSales)) {
+
+                reportSales("sales.csv");
             } else {
                 System.out.println("Invalid input");
             }
