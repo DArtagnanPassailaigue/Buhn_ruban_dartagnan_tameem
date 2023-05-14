@@ -183,7 +183,8 @@ public class system {
             while((line = reader.readLine()) != null) {
                 String salesAmountStr = line.split(",")[1];
                 if (salesAmountStr.matches(numberRegex)) {
-                    salesList.add(line.split(",")[1]);
+                    //salesList.add(line.split(",")[1]);
+                    salesList.add((line.split(",")[1].substring(0,1)));
                 }
 		    }
             reader.close();
