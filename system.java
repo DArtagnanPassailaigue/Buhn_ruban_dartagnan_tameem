@@ -69,7 +69,7 @@ public class system {
         String postalcode;
         do {
             System.out.println("Enter your postal code: ");
-            postalcode = input.next();
+            postalcode = input.next().toUpperCase();    // Makes the input uppercase
             if (postalcode.length() < 3 || !postalCodeCheck(postalcode, "postal_codes.csv")) {
                 System.out.println("Invalid postal code");
             }
@@ -97,36 +97,33 @@ public class system {
         String creditcard = enterCreditCard(input);
         return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
     }
-
+    /**
+     * this method checks the users inputed data, as long as it greater or equal then/to 3, against the imported csv file.
+     * returns confirmation message if it is valid.
+     * @author Ruban
+     * @return boolean
+     */
     public static boolean postalCodeCheck(String postalcode, String postalFile){
-        /*
-         * this method checks the users inputed data, as long as it greater or equal then/to 3, against the imported csv file.
-         * returns confirmation message if it is valid.
-         */
-        System.out.println("");
-        // ArrayList<String> lines = new ArrayList<String>();
-        
-        if(postalcode.length() >= 3){     // double checks if the user input is at least 3
-            postalcode = postalcode.substring(0, 3);    // taks the first 3 characters
+        postalcode = postalcode.substring(0, 3);    // taks the first 3 characters
+        String postalRegex = "[A-Z][0-9][A-Z]";     // looks for letter, number, letter pattern
+        if(postalcode.matches(postalRegex)){     // checks if the postal code follows the leter, number, letter pattern
 	        try {		
 		    FileReader fileRead = new FileReader(postalFile);
 		    BufferedReader reader = new BufferedReader(fileRead);
             String line;
-            while(true) {   // infinite loop
+            for (;;)  {   // infinite loop
                 line = reader.readLine();   // reads lines
                 if (line.contains(postalcode)) { // checks line
                     return true;
                 }
-                // lines.add(line);
-                // System.out.println(lines);
-                // test = "works";
-                // System.out.println(test);
+                
 		    }
         }   catch (Exception f) {
 			    ;
             }
         }
         return false;
+        
     }
             
     public static void generateCustomerInfo(Scanner scanner){
@@ -223,18 +220,21 @@ public class system {
         }
         return (nSum % 10 == 0);
     }
-
+    /**
+     * this method looks at a given sales data file and stores the first digit of the data in an array.
+     * It then return that array.
+     * 
+     * @author Ruban
+     * @return Array
+     */
     public static ArrayList<String> reportSales(String salesFile){
-        /*
-         * this method looks at a given sales data file and stores the first digit of the data in an array.
-         * It then return that array.
-         */
+        
         ArrayList<String> salesList= new ArrayList<String>();     //establishing the array
         try {		
 		    FileReader fileRead = new FileReader(salesFile);
 		    BufferedReader reader = new BufferedReader(fileRead);
             String line;
-            String numberRegex = "\\d+";    // regex establishes patterns. This one speciffically looks for anything with more than one digit.
+            String numberRegex = "\\d+";    // regex (Regular Expressions) establishes patterns. This one speciffically looks for anything with more than one digit.
             while((line = reader.readLine()) != null) {     // reads lines until there are no lines to read.
                 String salesAmountStr = line.split(",")[1];     // this checks/reads only the second row (1), established by the comma.
                 if (salesAmountStr.matches(numberRegex)) {     // ignores anything thats not a number(Titles, comments, labels, etc.)
