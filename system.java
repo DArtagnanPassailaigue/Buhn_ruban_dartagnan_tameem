@@ -89,15 +89,6 @@ public class system {
         return creditcard;
     }
 
-    public static String enterCustomerInfo() {
-        String firstname = enterFirstName(input);
-        String lastname = enterLastName(input);
-        String city = enterCity(input);
-        String postalcode = enterPostalCode(input);
-        String creditcard = enterCreditCard(input);
-        return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
-    }
-
     public static boolean postalCodeCheck(String postalcode, String postalFile){
         /*
          * this method checks the users inputed data, as long as it greater or equal then/to 3, against the imported csv file.
@@ -270,7 +261,7 @@ public class system {
             // prints the main menu
             userInput = input.next();
             if (userInput.equals(enterCustomer)) {
-                writeToTempFile(enterCustomerInfo(),input); // Pass the Scanner instance as a parameter
+                writeToTempFile(enterCustomerInfo(input),input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(generateCustomer)) {
                 generateCustomerInfo(input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(exitCondition)) {
