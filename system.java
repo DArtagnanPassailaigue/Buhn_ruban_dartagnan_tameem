@@ -244,6 +244,66 @@ public class system {
         return salesList;
     }
 
+    /*public static void benfordLawCheck(){
+        int[] benlist = new int[9];
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+        int count4 = 0;
+        int count5 = 0;
+        int count6 = 0;
+        int count7 = 0;
+        int count8 = 0;
+        int count9 = 0;
+        // declaring the local list variable and the int variables for each number that could appear
+        for(int i = 0; i < salesList; i++){
+            benford = (i[0]);
+            benlist.append(benford);
+            //appends each first number in each value in the sales list to the "benlist"
+        }
+
+        for i in benlist:
+            count1 = benlist.count('1');
+            count2 = benlist.count('2');
+            count3 = benlist.count('3');
+            count4 = benlist.count('4');
+            count5 = benlist.count('5');
+            count6 = benlist.count('6');
+            count7 = benlist.count('7');
+            count8 = benlist.count('8');
+            count9 = benlist.count('9');
+            // counts the amount of times each number appears in benlist
+        print("Numbers Recorded:", count1, count2, count3, count4, count5, count6, count7, count8, count9);
+        total = count1+count2+count3+count4+count5+count6+count7+count8+count9;
+        detectFraud(count1, total)
+        valueList = [count1, count2, count3, count4, count5, count6, count7, count8, count9];
+    }
+    */
+
+    /**
+    * uses the assigned number value and total to determine if fraud is present in the sales data based on set percentages
+    * @author D'Artagnan
+    */
+    public static void detectFraud(int num, int total){
+        if(numericRep(num, total) == "29%" || numericRep(num, total) == "30%" || numericRep(num, total) == "31%" || numericRep(num, total) == "32%"){
+            System.out.println("Fraud not detected :3");
+        } else{
+            System.out.println("!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!");
+        }
+        // if the calculation is within the allocated percent range, fraud is not detected
+    }
+
+    /**
+    * uses cross multiply and divide to find the percentage of the number plugged in to the function
+    * @author D'Artagnan
+    * @return the percentage value of the designated number over the total, with a percentage symbol at the end
+    */
+    public static String numericRep(int num, int total){
+        int calculation = num * 100 / total;  // cross multiply and divide to find the percentage
+        String strCalc = Integer.toString(calculation);
+        return strCalc + "%"; // removes the decimal from the percentage and adds the % sign
+    }
+
     public static void main(String[] args) {
         /**
          * Prints the menu and takes the user's inputs to run the various commands of the program
