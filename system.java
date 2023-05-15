@@ -26,50 +26,28 @@ public class system {
          * @param takes the scanner input when the function is accessed from the menu
          * takes the user's information and stores them in a temp file
          */
-    }
-    public static void enterCustomerInfo(Scanner input){
-        String firstname, lastname, city, postalcode, creditcard;
-
-    do {
-        System.out.println("Enter your first name: ");
-        firstname = input.next();
-        System.out.println("Enter your surname: ");
-        lastname = input.next();
-        System.out.println("Enter the name of your city: ");
-        city = input.next();
-        System.out.println("Enter your postal code: ");
-        postalcode = input.next().toUpperCase();    // makes your input all UPPERCASE
-
-        if (postalcode.length() < 3) {
-            System.out.println("Invalid postal code");  // error message
+        try {
+            File file = new File("temp.csv");
+            String path = file.getAbsolutePath();
+            // gets the file path to temp.csv on any device
+            FileWriter myWriter = new FileWriter(path);
+            myWriter.write(customerInfo);
+            // writes the temporary data to the temp file
+            myWriter.close();
+            System.out.println("Customer data ready for geneartion.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            // catches in case of an IOException error
         }
-        } while (postalcode.length() < 3);  // loops until the user gives a postal code more than 3
-        
-      	System.out.println(postalcodeCheck(postalcode, "postal_codes.csv"));
-        // System.out.println(code);
-        do {
-            System.out.println("Enter your credit card number: ");
-            creditcard = input.next();
-
-            if (creditcard.length() < 9) {
-                System.out.println("Invalid credit card number.");
-            }
-        } while (creditcard.length() < 9);
-            String customerInfo = firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
-            try {
-                File file = new File("temp.csv");
-                String path = file.getAbsolutePath();
-                // gets the file path to temp.csv on any device
-                FileWriter myWriter = new FileWriter(path);
-                myWriter.write(customerInfo);
-                // writes the temporary data to the temp file
-                myWriter.close();
-                System.out.println("Customer data ready for geneartion.");
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-                // catches in case of an IOException error
-            }
+    }
+    public static String enterCustomerInfo(Scanner input){
+        String firstname = enterFirstName(input);
+        String lastname = enterLastName(input);
+        String city = enterCity(input);
+        String postalcode = enterPostalCode(input);
+        String creditcard = enterCreditCard(input);
+        return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
     }
     
     public static String enterFirstName(Scanner input) {
@@ -92,13 +70,13 @@ public class system {
         do {
             System.out.println("Enter your postal code: ");
             postalcode = input.next();
-            if (postalcode.length() < 3) {
+            if (postalcode.length() < 3 || !postalCodeCheck(postalcode, "postal_codes.csv")) {
                 System.out.println("Invalid postal code");
             }
-        } while (postalcode.length() < 3);
+        } while (postalcode.length() < 3 || !postalCodeCheck(postalcode, "postal_codes.csv"));
         return postalcode;
     }
-    
+       
     public static String enterCreditCard(Scanner input) {
         String creditcard;
         do {
@@ -120,13 +98,12 @@ public class system {
         return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
     }
 
-    public static String postalcodeCheck(String postalcode, String postalFile){
+    public static boolean postalCodeCheck(String postalcode, String postalFile){
         /*
          * this method checks the users inputed data, as long as it greater or equal then/to 3, against the imported csv file.
          * returns confirmation message if it is valid.
          */
         System.out.println("");
-        String validation = null;
         // ArrayList<String> lines = new ArrayList<String>();
         
         if(postalcode.length() >= 3){     // double checks if the user input is at least 3
@@ -137,23 +114,19 @@ public class system {
             String line;
             while(true) {   // infinite loop
                 line = reader.readLine();   // reads lines
-                if (line.contains(postalcode)) {    // checks line
-                    validation = "Valid Postal code";   // success message
-                    break;
+                if (line.contains(postalcode)) { // checks line
+                    return true;
                 }
                 // lines.add(line);
                 // System.out.println(lines);
                 // test = "works";
                 // System.out.println(test);
 		    }
-            reader.close();
-
         }   catch (Exception f) {
-			    System.out.println(f.getMessage());
+			    ;
             }
         }
-            return validation;
-            
+        return false;
     }
             
     public static void generateCustomerInfo(Scanner scanner){
@@ -279,6 +252,7 @@ public class system {
             }
         return salesList;
     }
+
     public static void main(String[] args) {
         /**
          * Prints the menu and takes the user's inputs to run the various commands of the program
@@ -303,7 +277,6 @@ public class system {
                 ;
                 // does nothing so that an exit condition being met will not print "invalid input"
             } else if (userInput.equals(reportSales)) {
-
                 reportSales("sales.csv");
             } else {
                 System.out.println("Invalid input");
