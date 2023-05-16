@@ -7,25 +7,26 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.*;
 public class system {
 
     private static Scanner input;
     // global scanner used for multiple runs of the program
     
+    /**
+     *prints the system's main menu
+    * @author D'Artagnan
+    */
     public static void selection(){
-        /**
-         * @author D'Artagnan
-         * prints the system's main menu
-         */
         System.out.println("Customer and Sales System\n 1. Enter Customer Information\n 2. Generate Customer data file\n 3. Report on total Sales \n 4. Check for fraud in sales data \n 9. Quit\n Enter menu option (1-9): ");
     }
 
+    /**
+     *takes the user's information and stores them in a temp file
+    * @author D'Artagnan
+    * @param takes the scanner input when the function is accessed from the menu
+    */
     public static void writeToTempFile(String customerInfo, Scanner input){
-        /**
-         * @author D'Artagnan
-         * @param takes the scanner input when the function is accessed from the menu
-         * takes the user's information and stores them in a temp file
-         */
         try {
             File file = new File("temp.csv");
             String path = file.getAbsolutePath();
@@ -89,11 +90,11 @@ public class system {
         return creditcard;
     }
 
-    public static boolean postalCodeCheck(String postalcode, String postalFile){
-        /*
+    /**
          * this method checks the users inputed data, as long as it greater or equal then/to 3, against the imported csv file.
          * returns confirmation message if it is valid.
          */
+    public static boolean postalCodeCheck(String postalcode, String postalFile){
         System.out.println("");
         // ArrayList<String> lines = new ArrayList<String>();
         
@@ -105,7 +106,8 @@ public class system {
             String line;
             while(true) {   // infinite loop
                 line = reader.readLine();   // reads lines
-                if (line.contains(postalcode)) { // checks line
+                if (line.contains(postalcode)) { 
+                    reader.close(); // checks line
                     return true;
                 }
                 // lines.add(line);
@@ -114,18 +116,18 @@ public class system {
                 // System.out.println(test);
 		    }
         }   catch (Exception f) {
-			    ;
-            }
+            ;
+        }
         }
         return false;
     }
-            
-    public static void generateCustomerInfo(Scanner scanner){
+
         /**
+         * asks for a file name to save the user's data to and pulls it from the temp file to save it to the specified file
          * @author D'Artagnan
          * @param takes the scanner input when the function is accessed from the menu
-         * asks for a file name to save the user's data to and pulls it from the temp file to save it to the specified file
-         */
+         */        
+    public static void generateCustomerInfo(Scanner scanner){
         String fileName;
         do {
             System.out.println("Enter the name of the folder you wish to save to: ");
@@ -151,7 +153,11 @@ public class system {
         updateUserID();
         // runs updateUserId() at the end
     }
-
+        /**
+         * reads from the userID file and returns it as a string
+         * @author D'Artagnan
+         * @return the value of userID from the file as a string
+         */
     public static String readFile(String filename){
         /**
          * @author D'Artagnan
@@ -173,7 +179,10 @@ public class system {
             // catches in case of an IOException error
         }
     }
-
+    /**
+     * adds 1 to the userID value and writes it to userID.txt
+    * @author D'Artagnan
+    */
     public static void updateUserID(){
         /**
          * @author D'Artagnan
@@ -215,11 +224,11 @@ public class system {
         return (nSum % 10 == 0);
     }
 
-    public static ArrayList<String> reportSales(String salesFile){
-        /*
-         * this method looks at a given sales data file and stores the first digit of the data in an array.
-         * It then return that array.
-         */
+    /**
+    * this method looks at a given sales data file and stores the first digit of the data in an array.
+    * It then return that array.
+    */
+    public static ArrayList<String> reportSales(String salesFile, Scanner input){
         ArrayList<String> salesList= new ArrayList<String>();     //establishing the array
         try {		
 		    FileReader fileRead = new FileReader(salesFile);
@@ -244,48 +253,31 @@ public class system {
         return salesList;
     }
 
-    /*public static void benfordLawCheck(){
-        int[] benlist = new int[9];
-        int count1 = 0;
-        int count2 = 0;
-        int count3 = 0;
-        int count4 = 0;
-        int count5 = 0;
-        int count6 = 0;
-        int count7 = 0;
-        int count8 = 0;
-        int count9 = 0;
+    public static void benfordLawCheck(Scanner input){
         // declaring the local list variable and the int variables for each number that could appear
-        for(int i = 0; i < salesList; i++){
-            benford = (i[0]);
-            benlist.append(benford);
-            //appends each first number in each value in the sales list to the "benlist"
-        }
-
-        for i in benlist:
-            count1 = benlist.count('1');
-            count2 = benlist.count('2');
-            count3 = benlist.count('3');
-            count4 = benlist.count('4');
-            count5 = benlist.count('5');
-            count6 = benlist.count('6');
-            count7 = benlist.count('7');
-            count8 = benlist.count('8');
-            count9 = benlist.count('9');
-            // counts the amount of times each number appears in benlist
-        print("Numbers Recorded:", count1, count2, count3, count4, count5, count6, count7, count8, count9);
-        total = count1+count2+count3+count4+count5+count6+count7+count8+count9;
-        detectFraud(count1, total)
-        valueList = [count1, count2, count3, count4, count5, count6, count7, count8, count9];
+        ArrayList<String> salesList = reportSales("sales.csv", input);
+        int count1 = Collections.frequency(salesList, "1");
+        int count2 = Collections.frequency(salesList, "2");
+        int count3 = Collections.frequency(salesList, "3");
+        int count4 = Collections.frequency(salesList, "4");
+        int count5 = Collections.frequency(salesList, "5");
+        int count6 = Collections.frequency(salesList, "6");
+        int count7 = Collections.frequency(salesList, "7");
+        int count8 = Collections.frequency(salesList, "8");
+        int count9 = Collections.frequency(salesList, "9");
+        // counts the amount of times each number appears in benlist
+        System.out.println("Numbers Recorded: " + count1 + "," + count2 + "," + count3 + "," + count4 + "," + count5 + "," + count6 + "," + count7 + "," + count8 + "," + count9);
+        int total = count1+count2+count3+count4+count5+count6+count7+count8+count9;
+        System.out.println("Percentage Values Recorded: " + numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total));
+        detectFraud(count1, total);
     }
-    */
 
     /**
     * uses the assigned number value and total to determine if fraud is present in the sales data based on set percentages
     * @author D'Artagnan
     */
     public static void detectFraud(int num, int total){
-        if(numericRep(num, total) == "29%" || numericRep(num, total) == "30%" || numericRep(num, total) == "31%" || numericRep(num, total) == "32%"){
+        if(numericRep(num, total).equals("29%") || numericRep(num, total).equals("30%") || numericRep(num, total).equals("31%") || numericRep(num, total).equals("32%")){
             System.out.println("Fraud not detected :3");
         } else{
             System.out.println("!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!FRAUD DETECTED!!");
@@ -304,10 +296,10 @@ public class system {
         return strCalc + "%"; // removes the decimal from the percentage and adds the % sign
     }
 
+    /**
+    * Prints the menu and takes the user's inputs to run the various commands of the program
+    */ 
     public static void main(String[] args) {
-        /**
-         * Prints the menu and takes the user's inputs to run the various commands of the program
-         */
         input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
         String enterCustomer = "1";
@@ -324,11 +316,13 @@ public class system {
                 writeToTempFile(enterCustomerInfo(input),input); // Pass the Scanner instance as a parameter
             } else if (userInput.equals(generateCustomer)) {
                 generateCustomerInfo(input); // Pass the Scanner instance as a parameter
+            } else if (userInput.equals(reportSales)) {
+                reportSales("sales.csv", input);
+            } else if (userInput.equals(checkFraud)) {
+                benfordLawCheck(input);
             } else if (userInput.equals(exitCondition)) {
                 ;
                 // does nothing so that an exit condition being met will not print "invalid input"
-            } else if (userInput.equals(reportSales)) {
-                reportSales("sales.csv");
             } else {
                 System.out.println("Invalid input");
             }
