@@ -8,6 +8,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.*;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;  
 public class system {
 
     private static Scanner input;
@@ -272,6 +282,51 @@ public class system {
         System.out.println("Percentage Values Recorded: " + numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total));
         detectFraud(count1, total);
     }
+    
+    public static void displaySalesGraph(ArrayList<String> salesList) {
+        Stage stage = new Stage();
+        stage.setTitle("Sales Data");
+    
+        // Defining the axes
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Number");
+        yAxis.setLabel("Count");
+    
+        // Creating the bar chart
+        final BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Sales Data");
+    
+        // Creating the series
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Sales");
+    
+        // Adding data to the series
+        series.getData().add(new XYChart.Data<>("1", Collections.frequency(salesList, "1")));
+        series.getData().add(new XYChart.Data<>("2", Collections.frequency(salesList, "2")));
+        series.getData().add(new XYChart.Data<>("3", Collections.frequency(salesList, "3")));
+        series.getData().add(new XYChart.Data<>("4", Collections.frequency(salesList, "4")));
+        series.getData().add(new XYChart.Data<>("5", Collections.frequency(salesList, "5")));
+        series.getData().add(new XYChart.Data<>("6", Collections.frequency(salesList, "6")));
+        series.getData().add(new XYChart.Data<>("7", Collections.frequency(salesList, "7")));
+        series.getData().add(new XYChart.Data<>("8", Collections.frequency(salesList, "8")));
+        series.getData().add(new XYChart.Data<>("9", Collections.frequency(salesList, "9")));
+    
+        // Adding the series to the chart
+        barChart.getData().add(series);
+    
+        // Creating a VBox to hold the chart
+        VBox vbox = new VBox(barChart);
+    
+        // Creating the scene
+        Scene scene = new Scene(vbox, 800, 600);
+    
+        // Setting the scene on the stage
+        stage.setScene(scene);
+    
+        // Displaying the stage
+        stage.show();
+    }    
 
     /**
     * uses the assigned number value and total to determine if fraud is present in the sales data based on set percentages
