@@ -307,6 +307,10 @@ public class system {
         return salesList;
     }
 
+    /**
+     * checks the frequency of each first number in the sales file, prints the numbers recorded, calculates the total, and prints the percentages to the salesresults file
+     * @author D'Artagnan
+     */
     public static void benfordLawCheck(Scanner input){
         // declaring the local list variable and the int variables for each number that could appear
         ArrayList<String> salesList = reportSales("sales.csv", input);
