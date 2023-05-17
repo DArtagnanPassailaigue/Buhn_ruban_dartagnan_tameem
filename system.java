@@ -415,7 +415,7 @@ public class system {
                 line = input.nextLine();
                 String[] values = line.split(",");
                 for (String value : values) {
-                    fileWriter.write(numericRep(value) + ",");
+                    fileWriter.write(numericRep(value, input) + ",");
                 }
                 fileWriter.write("\n");
             }
@@ -438,7 +438,6 @@ public class system {
         String checkFraud = "4";
         String exitCondition = "9";
         String resultsFile = "salesresults.csv";
-        Scanner input = new Scanner(new File("sales.csv"));
         printNumericRepresentation(resultsFile, input);
         // calls all of the values of the menu option inputs
         do {
