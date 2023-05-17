@@ -324,7 +324,7 @@ public class system {
         int total = count1+count2+count3+count4+count5+count6+count7+count8+count9;
         String numericRepresentation = numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total);
         detectFraud(count1, total);
-        printNumericRepresentation("salesresults.csv",numericRepresentation, input);
+        printNumericRepresentation("salesresults.csv",numericRepresentation);
     }
     /**
      * Displays a bar chart representing the sales data.
@@ -407,16 +407,19 @@ public class system {
     * @param fileName a String representing the name of the file to be written to
     * @param input a Scanner object representing the input data
     */
-    public static void printNumericRepresentation(String fileName, String toWrite, Scanner input) {
-        FileWriter fileWriter = null;
-        try{
-            fileWriter = new FileWriter(fileName);
-            fileWriter.write(toWrite);
-            fileWriter.write("\n");
+    public static void printNumericRepresentation(String fileName, String numericRepresentation) {
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(numericRepresentation);
+            bufferedWriter.close();
+            System.out.println("Numeric representation saved to " + fileName);
         } catch (IOException e) {
-
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
     }
+    
     public static void main(String[] args) {
         input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
