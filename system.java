@@ -322,8 +322,9 @@ public class system {
         // counts the amount of times each number appears in benlist
         System.out.println("Numbers Recorded: " + count1 + "," + count2 + "," + count3 + "," + count4 + "," + count5 + "," + count6 + "," + count7 + "," + count8 + "," + count9);
         int total = count1+count2+count3+count4+count5+count6+count7+count8+count9;
-        System.out.println("Percentage Values Recorded: " + numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total));
+        String numericRepresentation = numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total);
         detectFraud(count1, total);
+        printNumericRepresentation("salesresults.csv",numericRepresentation, input);
     }
     /**
      * Displays a bar chart representing the sales data.
@@ -406,27 +407,14 @@ public class system {
     * @param fileName a String representing the name of the file to be written to
     * @param input a Scanner object representing the input data
     */
-    public static void printNumericRepresentation(String fileName, Scanner input) {
+    public static void printNumericRepresentation(String fileName, String toWrite, Scanner input) {
         FileWriter fileWriter = null;
-        try {
+        try{
             fileWriter = new FileWriter(fileName);
-            String line = "";
-            while (input.hasNext()) {
-                line = input.nextLine();
-                String[] values = line.split(",");
-                for (String value : values) {
-                    fileWriter.write(numericRep(value, input) + ",");
-                }
-                fileWriter.write("\n");
-            }
+            fileWriter.write(toWrite);
+            fileWriter.write("\n");
         } catch (IOException e) {
-            System.out.println("Error writing to file");
-        } finally {
-            try {
-                fileWriter.close();
-            } catch (IOException e) {
-                System.out.println("Error closing file");
-            }
+
         }
     }
     public static void main(String[] args) {
@@ -437,8 +425,6 @@ public class system {
         String reportSales = "3";
         String checkFraud = "4";
         String exitCondition = "9";
-        String resultsFile = "salesresults.csv";
-        printNumericRepresentation(resultsFile, input);
         // calls all of the values of the menu option inputs
         do {
             selection();
