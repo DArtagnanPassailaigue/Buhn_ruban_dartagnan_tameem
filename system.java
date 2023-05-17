@@ -52,6 +52,13 @@ public class system {
             // catches in case of an IOException error
         }
     }
+    /**
+    * Prompts the user to enter customer information and validates the input.
+    * @author Tameem and Dartagnan
+    * @param input The Scanner object used to read user input.
+    * @return A string containing the entered customer information in the format:
+    *         firstname,lastname,city,postalcode,creditcard
+    */
     public static String enterCustomerInfo(Scanner input){
         String firstname = enterFirstName(input);
         String lastname = enterLastName(input);
@@ -60,22 +67,42 @@ public class system {
         String creditcard = enterCreditCard(input);
         return firstname + "," + lastname + "," + city + "," + postalcode + "," + creditcard;
     }
-    
+    /**
+     * Prompts the user to enter their first name.
+     * @author Tameem
+     * @param input The Scanner object used to read user input.
+     * @return The entered first name as a string.
+     */
     public static String enterFirstName(Scanner input) {
         System.out.println("Enter your first name: ");
         return input.next();
     }
-    
+    /**
+    * Prompts the user to enter their last name.
+    * @author Tameem
+    * @param input The Scanner object used to read user input.
+    * @return The entered last name as a string.
+    */   
     public static String enterLastName(Scanner input) {
         System.out.println("Enter your surname: ");
         return input.next();
     }
-    
+    /**
+     * Prompts the user to enter the name of their city.
+     * @author Tameem
+     * @param input The Scanner object used to read user input.
+     * @return The entered city name as a string.
+     */
     public static String enterCity(Scanner input) {
         System.out.println("Enter the name of your city: ");
         return input.next();
     }
-    
+    /**
+     * Prompts the user to enter their postal code and validates it.
+     * @author Tameem
+     * @param input The Scanner object used to read user input.
+     * @return The entered postal code as a string.
+     */
     public static String enterPostalCode(Scanner input) {
         String postalcode;
         do {
@@ -87,7 +114,12 @@ public class system {
         } while (postalcode.length() < 3 || !postalCodeCheck(postalcode, "postal_codes.csv"));
         return postalcode;
     }
-       
+    /**
+     * Prompts the user to enter their credit card number and validates it.
+     * @author Tameem
+     * @param input The Scanner object used to read user input.
+     * @return The entered credit card number as a string.
+     */
     public static String enterCreditCard(Scanner input) {
         String creditcard;
         do {
@@ -99,7 +131,13 @@ public class system {
         } while (creditcard.length() < 9 || !luhnAlgo(creditcard));
         return creditcard;
     }
-
+    /**
+     * Prompts the user to enter customer information and validates the input.
+     * Uses the default Scanner object for reading user input.
+     *
+     * @return A string containing the entered customer information in the format:
+     *         firstname,lastname,city,postalcode,creditcard
+     */
     public static String enterCustomerInfo() {
         String firstname = enterFirstName(input);
         String lastname = enterLastName(input);
@@ -213,7 +251,12 @@ public class system {
             // catches in case of an IOException error
         }
     }
-
+    /**
+     * Validates a credit card number using the Luhn algorithm.
+     *
+     * @param cardNo The credit card number to validate.
+     * @return True if the credit card number is valid, false otherwise.
+     */
     public static boolean luhnAlgo(String cardNo) {
         int nDigits = cardNo.length();
 
@@ -282,7 +325,11 @@ public class system {
         System.out.println("Percentage Values Recorded: " + numericRep(count1, total) + "," + numericRep(count2,total) + "," + numericRep(count3,total) + "," + numericRep(count4,total) + "," + numericRep(count5,total) + "," + numericRep(count6,total) + "," + numericRep(count7,total) + "," + numericRep(count8,total) + "," + numericRep(count9,total));
         detectFraud(count1, total);
     }
-    
+    /**
+     * Displays a bar chart representing the sales data.
+     * @author Tameem
+     * @param salesList The list of sales data.
+     */
     public static void displaySalesGraph(ArrayList<String> salesList) {
         Stage stage = new Stage();
         stage.setTitle("Sales Data");
@@ -352,6 +399,36 @@ public class system {
         return strCalc + "%"; // removes the decimal from the percentage and adds the % sign
     }
 
+    /**
+    * This method takes in a file name and a Scanner object and writes the numeric representation of each value to a "results.csv" file using a FileWriter.
+    * The method splits each line by comma and gets the numeric representation of each value using the numericRep method.
+    * @author Tameem
+    * @param fileName a String representing the name of the file to be written to
+    * @param input a Scanner object representing the input data
+    */
+    public static void printNumericRepresentation(String fileName, Scanner input) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(fileName);
+            String line = "";
+            while (input.hasNext()) {
+                line = input.nextLine();
+                String[] values = line.split(",");
+                for (String value : values) {
+                    fileWriter.write(numericRep(value) + ",");
+                }
+                fileWriter.write("\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file");
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                System.out.println("Error closing file");
+            }
+        }
+    }
     public static void main(String[] args) {
         input = new Scanner(System.in); // Create a single instance of Scanner
         String userInput = null;
@@ -360,6 +437,9 @@ public class system {
         String reportSales = "3";
         String checkFraud = "4";
         String exitCondition = "9";
+        String resultsFile = "salesresults.csv";
+        Scanner input = new Scanner(new File("sales.csv"));
+        printNumericRepresentation(resultsFile, input);
         // calls all of the values of the menu option inputs
         do {
             selection();
